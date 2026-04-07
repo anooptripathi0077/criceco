@@ -3,14 +3,11 @@ import axios from 'axios';
 // Connects to your Node.js Backend
 export const backendAPI = axios.create({
     baseURL: 'http://localhost:5000/api', 
+    withCredentials: true
 });
 
-// Automatically attach the JWT token to every request if the user is logged in
+// Interceptor for checking token in localStorage is no longer needed since we use cookies
 backendAPI.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
     return config;
 });
 

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import StadiumMap from './StadiumMap';
+import SeatGridModal from './SeatGridModal';
 
-export default function StadiumViewer({ stadiumData, matchLabel }) {
+export default function StadiumViewer({ stadiumData, matchLabel, matchId }) {
   const [selectedStand, setSelectedStand] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const inr = n => '₹' + Number(n).toLocaleString('en-IN');
 
@@ -83,6 +85,7 @@ export default function StadiumViewer({ stadiumData, matchLabel }) {
               boxShadow: '0 8px 20px rgba(230, 51, 41, 0.25)',
               transition: 'transform 0.2s'
             }}
+            onClick={() => setShowModal(true)}
             onMouseEnter={e => e.target.style.transform = 'scale(1.02)'}
             onMouseLeave={e => e.target.style.transform = 'scale(1)'}
             >
@@ -91,6 +94,14 @@ export default function StadiumViewer({ stadiumData, matchLabel }) {
           </div>
         )}
       </div>
+
+      {showModal && selectedStand && (
+        <SeatGridModal 
+          matchId={matchId} 
+          standData={selectedStand} 
+          onClose={() => setShowModal(false)} 
+        />
+      )}
     </div>
   );
 }

@@ -6,9 +6,9 @@ import stad2 from './stad2';
 import stad3 from './stad3';
 
 const STADIUMS = {
-  stad1,
-  stad2,
-  stad3
+  wankhede: stad1,
+  eden_gardens: stad2,
+  ahmedabad: stad3
 };
 
 // Look up a stadium by its id string

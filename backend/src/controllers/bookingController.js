@@ -67,8 +67,8 @@ const lockSeat = async (req, res) => {
 // @route   POST /api/bookings/confirm
 // @access  Private
 const confirmBooking = async (req, res) => {
-    // 🚨 ADDED tierName to the incoming request body
-    const { matchId, seatId, tierName, photoBase64 } = req.body; 
+    // We no longer strictly need tierName for the DB, but can keep it in payload if frontend sends it.
+    const { matchId, seatId, photoBase64 } = req.body; 
     const userId = req.user.id;
     const lockKey = `seat_lock:${matchId}:${seatId}`;
 
@@ -101,11 +101,11 @@ const confirmBooking = async (req, res) => {
             
             const vectorString = `[${faceEmbedding.join(',')}]`;
 
-            // 🚨 FIXED: Now inserting the tier_name into the database
+            // NEW: Insert into physical Tickets table which just links match_id and seat_id
             const newTicket = await client.query(
-                `INSERT INTO Tickets (user_id, match_id, seat_id, tier_name, status, face_embedding) 
-                 VALUES ($1, $2, $3, $4, 'Booked', $5) RETURNING *`,
-                [userId, matchId, seatId, tierName, vectorString]
+                `INSERT INTO Tickets (user_id, match_id, seat_id, status, face_embedding) 
+                 VALUES ($1, $2, $3, 'Booked', $4) RETURNING *`,
+                [userId, matchId, seatId, vectorString]
             );
 
             await client.query('COMMIT');
@@ -136,14 +136,20 @@ const getMyTickets = async (req, res) => {
     const userId = req.user.id;
 
     try {
-        // Fetch tickets and join with Matches and Stadiums to get full details
+        // Fetch tickets and join with Seats, Blocks, Stands, Matches, and Stadiums to get full details
         const tickets = await dbPool.query(`
-            SELECT t.id as ticket_id, t.seat_id, t.tier_name, t.status, t.created_at,
+            SELECT t.id as ticket_id, t.status, t.created_at,
+                   s.row_id, s.seat_number,
+                   b.name as block_name,
+                   st.name as stand_name, st.tier as tier_name,
                    m.team_a, m.team_b, m.date as match_date,
-                   s.name as stadium_name
+                   stadium.name as stadium_name
             FROM Tickets t
+            JOIN Seats s ON t.seat_id = s.id
+            JOIN Blocks b ON s.block_id = b.id
+            JOIN Stands st ON s.stand_id = st.id
             JOIN Matches m ON t.match_id = m.id
-            JOIN Stadiums s ON m.stadium_id = s.id
+            JOIN Stadiums stadium ON m.stadium_id = stadium.id
             WHERE t.user_id = $1
             ORDER BY m.date ASC
         `, [userId]);

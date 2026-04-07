@@ -25,11 +25,8 @@ const Login = () => {
                 response = await backendAPI.post('/auth/register', { name, email, password, role: 'User' });
             }
 
-            // Save the JWT token to the browser's local storage
-            localStorage.setItem('token', response.data.token);
-            
             // 🚨 THE FIX: Force a hard refresh of the browser
-            // This guarantees App.jsx sees your token and unlocks the Checkout page
+            // This guarantees App.jsx sees your cookie and unlocks the Checkout page
             window.location.href = '/';
             
         } catch (err) {

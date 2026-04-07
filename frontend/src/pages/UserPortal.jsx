@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getStadium } from "../stadiums";
 import StadiumViewer from "../components/StadiumViewer";
+import { backendAPI } from "../services/api";
 
 
 if (!document.getElementById("cn-fonts")) {
@@ -12,20 +13,21 @@ if (!document.getElementById("cn-fonts")) {
 }
 
 
-const DEMO_MATCHES = [
-  { id: 1, team_a: "MI",  team_b: "CSK", date: "2025-04-15T19:30:00", stadium_id: "stad1"     },
-  { id: 2, team_a: "KKR", team_b: "RCB", date: "2025-04-18T19:30:00", stadium_id: "stad2" },
-  { id: 3, team_a: "MI",  team_b: "KKR", date: "2025-04-22T15:30:00", stadium_id: "stad3"     },
-  { id: 4, team_a: "CSK", team_b: "DC",  date: "2025-04-25T19:30:00", stadium_id: "stad2" },
-];
-
 export default function UserPortal() {
   const [matches, setMatches] = useState([]);
   const [selectedMatch, setSelectedMatch] = useState(null);
 
-  // Set the matches immediately on mount
+  // Fetch real matches from the API
   useEffect(() => {
-    setMatches(DEMO_MATCHES);
+    const fetchMatches = async () => {
+      try {
+        const response = await backendAPI.get('/matches');
+        setMatches(response.data);
+      } catch (error) {
+        console.error("Failed to fetch matches", error);
+      }
+    };
+    fetchMatches();
   }, []);
 
   // Compute stadium data and label when a match is selected
@@ -114,7 +116,7 @@ export default function UserPortal() {
       {/* ── Stadium viewer ── */}
       {selectedMatch && stadiumData && (
         <div style={{ maxWidth: 1350, margin: "0 auto" }}>
-          <StadiumViewer stadiumData={stadiumData} matchLabel={matchLabel} />
+          <StadiumViewer stadiumData={stadiumData} matchLabel={matchLabel} matchId={selectedMatch.id} />
         </div>
       )}
 

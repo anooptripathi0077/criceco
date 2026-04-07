@@ -38,7 +38,9 @@ const MyTickets = () => {
                             </div>
                             <div className="ticket-body">
                                 <p><strong>Stadium:</strong> {ticket.stadium_name}</p>
-                                <p><strong>Seat:</strong> {ticket.seat_id} ({ticket.tier_name})</p>
+                                <p><strong>Stand:</strong> {ticket.stand_name} ({ticket.tier_name})</p>
+                                <p><strong>Block:</strong> {ticket.block_name}</p>
+                                <p><strong>Row & Seat:</strong> {ticket.row_id} - Seat {ticket.seat_number}</p>
                                 <p><strong>Status:</strong> <span style={{ color: 'green', fontWeight: 'bold' }}>{ticket.status}</span></p>
                                 <div style={{ marginTop: '15px', padding: '10px', backgroundColor: '#eee', textAlign: 'center', borderRadius: '5px' }}>
                                     <small>Ticket ID (Show at Gate)</small>

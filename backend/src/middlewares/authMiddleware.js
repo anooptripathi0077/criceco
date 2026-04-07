@@ -2,17 +2,15 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const protect = (req, res, next) => {
-    let token = req.headers.authorization;
+    let token = req.cookies.token;
 
-    if (token && token.startsWith('Bearer')) {
+    if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
+    }
+
+    if (token) {
         try {
-            // Extract token from "Bearer <token>"
-            token = token.split(' ')[1];
-
-            // Verify token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            
-            // Attach user info to the request object for the next controller to use
             req.user = decoded;
             next();
         } catch (error) {

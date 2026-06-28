@@ -152,8 +152,6 @@ ADD COLUMN IF NOT EXISTS ticket_price DECIMAL(10, 2);
 
 
 
--- Run these queries sequentially to create the Bank schema 
-
 -- 1. Create the Bank Table 
 CREATE TABLE IF NOT EXISTS Bank (
     id SERIAL PRIMARY KEY,

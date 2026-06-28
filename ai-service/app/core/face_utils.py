@@ -5,7 +5,6 @@ import os
 import requests
 from typing import List
 
-# File paths for the lightweight OpenCV models
 YUNET_MODEL_PATH = "face_detection_yunet.onnx"
 SFACE_MODEL_PATH = "face_recognition_sface.onnx"
 
@@ -19,11 +18,9 @@ def download_model_if_missing(filename: str, url: str):
                 f.write(chunk)
         print("Download complete!")
 
-# Download models on startup
 download_model_if_missing(YUNET_MODEL_PATH, "https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx")
 download_model_if_missing(SFACE_MODEL_PATH, "https://github.com/opencv/opencv_zoo/raw/main/models/face_recognition_sface/face_recognition_sface_2021dec.onnx")
 
-# Initialize OpenCV AI Models
 detector = cv2.FaceDetectorYN.create(YUNET_MODEL_PATH, "", (320, 320))
 recognizer = cv2.FaceRecognizerSF.create(SFACE_MODEL_PATH, "")
 
@@ -40,16 +37,13 @@ def generate_face_embedding(image_array: np.ndarray) -> List[float]:
     height, width, _ = image_array.shape
     detector.setInputSize((width, height))
     
-    # 1. Detect the face
     _, faces = detector.detect(image_array)
     if faces is None:
          raise ValueError("No face detected in the provided image.")
             
-    # 2. Align and extract features (using the first face found)
     face_align = recognizer.alignCrop(image_array, faces[0])
     face_feature = recognizer.feature(face_align)
-    
-    # Return as a standard Python list of floats (128 dimensions)
+
     return face_feature[0].tolist()
 
 def calculate_cosine_similarity(vec1: List[float], vec2: List[float]) -> float:

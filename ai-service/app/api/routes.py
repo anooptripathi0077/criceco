@@ -31,7 +31,6 @@ async def verify_face(payload: VerifyPayload):
         
         similarity = calculate_cosine_similarity(live_vector, payload.stored_embedding)
         
-        # 0.70 is a good threshold for SFace
         is_match = similarity >= 0.70 
         
         return {

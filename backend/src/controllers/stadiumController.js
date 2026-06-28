@@ -1,8 +1,5 @@
 const dbPool = require('../config/db');
 
-// @desc    Add a new stadium and its layout mapping
-// @route   POST /api/stadiums
-// @access  Private/Admin
 const addStadium = async (req, res) => {
     const { name, layout_data } = req.body;
 
@@ -17,9 +14,6 @@ const addStadium = async (req, res) => {
     }
 };
 
-// @desc    Get all stadiums (Admin uses this when creating a match)
-// @route   GET /api/stadiums
-// @access  Private/Admin
 const getStadiums = async (req, res) => {
     try {
         const stadiums = await dbPool.query('SELECT id, name FROM Stadiums');

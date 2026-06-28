@@ -9,7 +9,7 @@ const stad2 = {
   city: 'Kolkata',
   country: 'India',
   capacity: 66349,
-  image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Eden_Gardens_during_2016_ICC_World_Twenty20.jpg/1280px-Eden_Gardens_during_2016_ICC_World_Twenty20.jpg',
+  image: 'https://ddbuunwwdcbgchbaphnp.supabase.co/storage/v1/object/sign/stands/eg_mainimg.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83ZmEyNWZmMS05ZDY0LTRiYTAtODBkOS1lYjUzOTlmZTAzZWIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGFuZHMvZWdfbWFpbmltZy5qcGciLCJpYXQiOjE3NzY2MzA2NDUsImV4cCI6MTgwODE2NjY0NX0.g9wEf6XMpRLqIURfc0YNix5C-aRxB7lMfco6WKGYYm4',
 
   stands: [
     // ── Inner tier ──

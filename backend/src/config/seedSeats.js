@@ -129,7 +129,6 @@ async function runSeed() {
                     const blockId = blockResult.rows[0].id;
                     const seatsInThisBlock = seatsPerBlock + (i < remainder ? 1 : 0);
 
-                    // --- ARCHITECTURAL GEOMETRY ENGINE ---
                     let seatsPerRow;
                     if (stand.tier === 'Upper') {
                         seatsPerRow = 60; // Wide & Panoramic
@@ -164,63 +163,6 @@ async function runSeed() {
                     }
                 }
             }
-        }
-        console.log('✅ Generated ~275,000 physical seats with unique stadium layouts!');
-
-        // 6. Seed 15 Matches
-        console.log('Seeding 15 Demo Matches...');
-        
-        const teams = ['MI', 'CSK', 'KKR', 'RCB', 'DC', 'RR', 'PBKS', 'SRH', 'LSG', 'GT'];
-        let matchValues = [];
-        let index = 1;
-        let generatedMatchIds = [];
-        let matchStadiumMapping = [];
-
-        // 5 matches per stadium
-        const dates = [
-            '2025-04-15 19:30:00', '2025-04-18 19:30:00', '2025-04-20 15:30:00', 
-            '2025-04-22 19:30:00', '2025-04-25 19:30:00'
-        ];
-
-        for (const std of allStadiums) {
-            for (let i = 0; i < 5; i++) {
-                let t1 = teams[index % teams.length];
-                let t2 = teams[(index + 3) % teams.length]; // randomish opponent
-                matchValues.push(`(${index}, '${t1}', '${t2}', '${std.stdId}', '${dates[i]}')`);
-                generatedMatchIds.push(index);
-                matchStadiumMapping.push({ matchId: index, stadiumId: std.stdId });
-                index++;
-            }
-        }
-
-        if (matchValues.length > 0) {
-            await client.query(`
-                INSERT INTO Matches (id, team_a, team_b, stadium_id, date)
-                VALUES ${matchValues.join(',')}
-                ON CONFLICT (id) DO NOTHING
-            `);
-        }
-
-        // 7. Seed Match_Stands_Config
-        console.log('Seeding Match Pricing Config for 15 matches...');
-        let configInserts = [];
-        for (const mapping of matchStadiumMapping) {
-            const stdStands = allStadiums.find(s => s.stdId === mapping.stadiumId).stands;
-            for (const stand of stdStands) {
-                const basePrice = Math.floor(Math.random() * 5000) + 1500; 
-                configInserts.push(`(${mapping.matchId}, '${stand.id}', ${basePrice}, 1.0)`);
-            }
-        }
-        
-        // Chunk insertion
-        const chunkSize = 100;
-        for (let i = 0; i < configInserts.length; i += chunkSize) {
-            const chunk = configInserts.slice(i, i + chunkSize);
-            await client.query(`
-                INSERT INTO Match_Stands_Config (match_id, stand_id, base_price, dynamic_pricing_factor)
-                VALUES ${chunk.join(',')} 
-                ON CONFLICT (match_id, stand_id) DO NOTHING
-            `);
         }
 
         await client.query('COMMIT');

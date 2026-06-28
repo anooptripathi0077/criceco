@@ -4,7 +4,7 @@ require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    // Optimal pool settings for high concurrency
+   
     ssl: {
         rejectUnauthorized: false
     },

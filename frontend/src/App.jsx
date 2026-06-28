@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import UserPortal from "./pages/UserPortal";
@@ -17,7 +12,103 @@ import { backendAPI } from "./services/api";
 import "./index.css";
 import Footer from "./components/Footer";
 
-function App() {
+// Inner component allows us to use the useLocation hook
+const AppContent = ({ user, handleLogout, darkMode, setDarkMode }) => {
+  const location = useLocation();
+  const isLoggedIn = !!user;
+  const userRole = user?.role ? user.role.toUpperCase() : "USER";
+
+  // Define paths where Navbar and Footer should be hidden
+  const hideNavAndFooter = ["/login"].includes(location.pathname);
+
+  return (
+    <div className="app-shell min-h-screen font-['Inter',sans-serif] flex flex-col">
+      {/* Conditionally render Navbar */}
+      {!hideNavAndFooter && (
+        <Navbar
+          user={user}
+          handleLogout={handleLogout}
+          darkMode={darkMode}
+          onToggleTheme={() => setDarkMode((prev) => !prev)}
+        />
+      )}
+
+      <div className="flex-grow">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              userRole === "ADMIN" ? (
+                <Navigate to="/admin" replace />
+              ) : userRole === "SECURITY" ? (
+                <Navigate to="/security" replace />
+              ) : (
+                <UserPortal />
+              )
+            }
+          />
+
+          <Route 
+            path="/login" 
+            element={isLoggedIn ? <Navigate to="/" replace /> : <Login />} 
+          />
+
+          <Route
+            path="/book/:matchId"
+            element={
+              userRole === "ADMIN" ? (
+                <Navigate to="/admin" replace />
+              ) : userRole === "SECURITY" ? (
+                <Navigate to="/security" replace />
+              ) : (
+                <BookingPage />
+              )
+            }
+          />
+
+          <Route
+            path="/checkout/:matchId/:seatId"
+            element={isLoggedIn ? <Checkout /> : <Navigate to="/login" />}
+          />
+          
+          <Route
+            path="/my-tickets"
+            element={isLoggedIn ? <MyTickets /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/security"
+            element={
+              userRole === "SECURITY" || userRole === "ADMIN" ? (
+                <SecurityScan />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+          
+          <Route
+            path="/admin"
+            element={
+              userRole === "ADMIN" ? (
+                <AdminDashboard />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+
+      {/* Conditionally render Footer */}
+      {!hideNavAndFooter && <Footer />}
+    </div>
+  );
+};
+
+export default function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(() => {
@@ -67,102 +158,14 @@ function App() {
       </div>
     );
 
-  const isLoggedIn = !!user;
-
-  // 👉 Force uppercase to prevent any database case-sensitivity bugs ('security' vs 'Security')
-  const userRole = user?.role ? user.role.toUpperCase() : "USER";
-
   return (
     <Router>
-      <div className="app-shell min-h-screen font-['Inter',sans-serif] flex flex-col">
-        {/* Navbar handles its own UI based on userRole */}
-        <Navbar
-          user={user}
-          handleLogout={handleLogout}
-          darkMode={darkMode}
-          onToggleTheme={() => setDarkMode((prev) => !prev)}
-        />
-
-        {/* Main Routing Content (flex-grow pushes footer to bottom) */}
-        <div className="flex-grow">
-          <Routes>
-            {/* 👉 Smart Routing for Home Page */}
-            <Route
-              path="/"
-              element={
-                userRole === "ADMIN" ? (
-                  <Navigate to="/admin" replace />
-                ) : userRole === "SECURITY" ? (
-                  <Navigate to="/security" replace />
-                ) : (
-                  <UserPortal />
-                )
-              }
-            />
-
-            {/* 🔥 THE FIX IS HERE 🔥 
-                If 'user' exists, immediately kick them to Home and erase history. 
-                Otherwise, show the Login page. 
-            */}
-            <Route 
-              path="/login" 
-              element={isLoggedIn ? <Navigate to="/" replace /> : <Login />} 
-            />
-
-            {/* 👉 Prevent Staff from accessing booking flows */}
-            <Route
-              path="/book/:matchId"
-              element={
-                userRole === "ADMIN" ? (
-                  <Navigate to="/admin" replace />
-                ) : userRole === "SECURITY" ? (
-                  <Navigate to="/security" replace />
-                ) : (
-                  <BookingPage />
-                )
-              }
-            />
-
-            <Route
-              path="/checkout/:matchId/:seatId"
-              element={isLoggedIn ? <Checkout /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/my-tickets"
-              element={isLoggedIn ? <MyTickets /> : <Navigate to="/login" />}
-            />
-
-            {/* 👉 Protect Security and Admin specific routes */}
-            <Route
-              path="/security"
-              element={
-                userRole === "SECURITY" || userRole === "ADMIN" ? (
-                  <SecurityScan />
-                ) : (
-                  <Navigate to="/" replace />
-                )
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                userRole === "ADMIN" ? (
-                  <AdminDashboard />
-                ) : (
-                  <Navigate to="/" replace />
-                )
-              }
-            />
-
-            {/* Catch-all fallback */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </div>
-
-        <Footer />
-      </div>
+      <AppContent 
+        user={user} 
+        handleLogout={handleLogout} 
+        darkMode={darkMode} 
+        setDarkMode={setDarkMode} 
+      />
     </Router>
   );
 }
-
-export default App;

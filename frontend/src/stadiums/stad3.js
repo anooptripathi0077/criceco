@@ -9,7 +9,7 @@ const stad3 = {
   city: 'Ahmedabad',
   country: 'India',
   capacity: 132000,
-  image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Narendra_Modi_Stadium_aerial_view.jpg/1280px-Narendra_Modi_Stadium_aerial_view.jpg',
+  image: 'https://ddbuunwwdcbgchbaphnp.supabase.co/storage/v1/object/sign/stands/ahmedabadmain.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83ZmEyNWZmMS05ZDY0LTRiYTAtODBkOS1lYjUzOTlmZTAzZWIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGFuZHMvYWhtZWRhYmFkbWFpbi5qcGciLCJpYXQiOjE3NzY2OTA3NTksImV4cCI6MTgwODIyNjc1OX0.HtjIzKZ2NQ4p7yKZGvM90MJfhUTjJuxNJRLwJVwlroI',
 
   stands: [
     // ── LOWER BOWL (Full 360° Ring) ──

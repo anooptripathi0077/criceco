@@ -139,8 +139,8 @@ export default function SecurityScan() {
             {/* Step 1: Lookup Box */}
             <div className="bg-white rounded-[2rem] shadow-sm border border-slate-200 overflow-hidden">
               <div className="p-8">
-                <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-5 font-['JetBrains_Mono']">
-                  01 // Ticket Lookup
+                <h2 className="text-2xl font-bold text-slate-800 uppercase tracking-wider mb-5 font-['JetBrains_Mono']">
+                  Ticket Lookup
                 </h2>
 
                 <form
@@ -171,15 +171,15 @@ export default function SecurityScan() {
               className={`bg-white rounded-[2rem] shadow-sm border overflow-hidden transition-all duration-500 ${ticketData ? "border-blue-200 ring-4 ring-blue-50" : "border-slate-200"}`}
             >
               <div className="p-8">
-                <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-5 font-['JetBrains_Mono']">
-                  Passenger Record
+                <h2 className="text-2xl font-bold text-slate-800 uppercase tracking-wider mb-5 font-['JetBrains_Mono']">
+                  User Record
                 </h2>
 
                 {ticketData ? (
                   <div className="space-y-6 animate-[fadeIn_0.4s_ease-out]">
                     <div>
-                      <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1 font-['JetBrains_Mono']">
-                        Passenger Name
+                      <p className="text-xl text-slate-600 font-bold uppercase tracking-wider mb-1 font-['JetBrains_Mono']">
+                        User Name
                       </p>
                       <p className="text-xl text-slate-900 font-bold">
                         {ticketData.user_name}
@@ -205,8 +205,8 @@ export default function SecurityScan() {
           <div className="lg:col-span-8">
             <div className="bg-white rounded-[2rem] shadow-md border border-slate-200 overflow-hidden h-full min-h-[600px] flex flex-col">
               <div className="p-6 md:p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider font-['JetBrains_Mono']">
-                  02 // Biometric Scan
+                <h2 className="text-2xl font-bold text-slate-800 uppercase tracking-wider font-['JetBrains_Mono']">
+                  Biometric Scan
                 </h2>
                 {ticketData && (
                   <span className="flex items-center gap-2 text-xs font-bold text-blue-600 animate-pulse bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-md">

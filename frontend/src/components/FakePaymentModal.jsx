@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const FakePaymentModal = ({ amount, matchId, seatId, onSuccess, onFailure }) => {
-    const [step, setStep] = useState('enter-details'); // enter-details, processing, success, failure
+    const [step, setStep] = useState('enter-details'); 
     const [cardNumber, setCardNumber] = useState('4111111111111111');
     const [cardName, setCardName] = useState('Test User');
     const [expiry, setExpiry] = useState('12/25');
     const [cvv, setCvv] = useState('123');
     const [isProcessing, setIsProcessing] = useState(false);
     const [simulateFailure, setSimulateFailure] = useState(false);
-    const [fakePaymentId, setFakePaymentId] = useState(null);  // Store the payment ID
+    const [fakePaymentId, setFakePaymentId] = useState(null);
 
     const handlePayment = async () => {
         setIsProcessing(true);
-        // Generate payment ID once at the start
         setFakePaymentId(`pay_${Date.now()}`);
         setStep('processing');
 
         // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 2500));
 
         if (simulateFailure) {
             setStep('failure');
@@ -51,201 +50,228 @@ const FakePaymentModal = ({ amount, matchId, seatId, onSuccess, onFailure }) => 
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 font-['Inter',sans-serif]">
+            <div className="bg-white rounded-[2rem] shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 animate-[fadeUp_0.3s_ease-out]">
                 
-                {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
-                    <h2 className="text-2xl font-bold">💳 Payment</h2>
-                    <p className="text-blue-100 text-sm mt-1">Secure Test Payment Portal</p>
-                </div>
-
-                {/* Content */}
-                <div className="p-6">
-                    
-                    {/* Step 1: Enter Card Details */}
-                    {step === 'enter-details' && (
-                        <div className="space-y-4">
-                            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
-                                <p className="text-sm text-blue-700">
-                                    <span className="font-bold">Test Mode:</span> Use any valid card format
-                                </p>
-                                <p className="text-xs text-blue-600 mt-1">Card: 4111111111111111 | Expiry: 12/25 | CVV: 123</p>
-                            </div>
-
+                {/* Step 1: Enter Card Details */}
+                {step === 'enter-details' && (
+                    <>
+                        <div className="px-8 pt-8 pb-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
-                                <div className="text-3xl font-bold text-green-600">₹ {amount.toFixed(2)}</div>
-                                <p className="text-xs text-gray-500 mt-1">Match {matchId} • Seat {seatId}</p>
+                                <p className="text-slate-500 font-medium text-sm mb-1">Pay SecureSeat</p>
+                                <h2 className="text-3xl font-black text-slate-900 tracking-tight">₹ {amount.toFixed(2)}</h2>
                             </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Cardholder Name</label>
-                                <input
-                                    type="text"
-                                    value={cardName}
-                                    onChange={(e) => setCardName(e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter name on card"
-                                />
+                            <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center">
+                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                </svg>
                             </div>
+                        </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
-                                <input
-                                    type="text"
-                                    value={formatCardNumber(cardNumber)}
-                                    onChange={handleCardNumberChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
-                                    placeholder="1234 5678 9012 3456"
-                                    maxLength="19"
-                                />
-                            </div>
+                        <div className="p-8">
+                            <div className="space-y-5">
+                                {/* Simulated Card Alert */}
+                                <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex items-start gap-3">
+                                    <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div>
+                                        <p className="text-sm font-semibold text-slate-800">Test Mode Environment</p>
+                                        <p className="text-xs text-slate-500 mt-1">Use the pre-filled mock data or any valid format to simulate a transaction.</p>
+                                    </div>
+                                </div>
 
-                            <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Expiry</label>
+                                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 font-['JetBrains_Mono']">Card Information</label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                            </svg>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={formatCardNumber(cardNumber)}
+                                            onChange={handleCardNumberChange}
+                                            className="w-full pl-12 pr-4 py-3.5 bg-white border border-slate-200 rounded-t-xl text-slate-900 font-medium font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all z-10 relative"
+                                            placeholder="Card number"
+                                            maxLength="19"
+                                        />
+                                    </div>
+                                    <div className="flex -mt-[1px]">
+                                        <input
+                                            type="text"
+                                            value={expiry}
+                                            onChange={handleExpiryChange}
+                                            className="w-1/2 px-4 py-3.5 bg-white border border-slate-200 rounded-bl-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all relative z-0"
+                                            placeholder="MM / YY"
+                                            maxLength="5"
+                                        />
+                                        <input
+                                            type="password"
+                                            value={cvv}
+                                            onChange={handleCVVChange}
+                                            className="w-1/2 px-4 py-3.5 bg-white border border-slate-200 border-l-0 rounded-br-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all relative z-0"
+                                            placeholder="CVC"
+                                            maxLength="3"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 font-['JetBrains_Mono']">Name on card</label>
                                     <input
                                         type="text"
-                                        value={expiry}
-                                        onChange={handleExpiryChange}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="MM/YY"
-                                        maxLength="5"
+                                        value={cardName}
+                                        onChange={(e) => setCardName(e.target.value)}
+                                        className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                        placeholder="John Doe"
                                     />
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">CVV</label>
-                                    <input
-                                        type="text"
-                                        value={cvv}
-                                        onChange={handleCVVChange}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="123"
-                                        maxLength="3"
-                                    />
+
+                                <div className="pt-2">
+                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                        <div className="relative flex items-center justify-center">
+                                            <input
+                                                type="checkbox"
+                                                checked={simulateFailure}
+                                                onChange={(e) => setSimulateFailure(e.target.checked)}
+                                                className="peer appearance-none w-5 h-5 border-2 border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500/50 checked:bg-slate-800 checked:border-slate-800 transition-all cursor-pointer"
+                                            />
+                                            <svg className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        <span className="text-sm text-slate-600 font-medium group-hover:text-slate-900 transition-colors">Force payment failure (Testing)</span>
+                                    </label>
+                                </div>
+
+                                <div className="pt-4 flex flex-col gap-3">
+                                    <button
+                                        onClick={handlePayment}
+                                        disabled={isProcessing || !cardNumber || !cardName || !expiry || !cvv}
+                                        className="w-full bg-slate-900 hover:bg-blue-600 disabled:bg-slate-300 text-white font-bold text-lg py-4 rounded-xl transition-all shadow-lg hover:shadow-blue-500/25 transform hover:-translate-y-0.5 active:translate-y-0"
+                                    >
+                                        Pay ₹{amount.toFixed(2)}
+                                    </button>
+                                    <button
+                                        onClick={onFailure}
+                                        className="w-full bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold py-3.5 rounded-xl transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
                                 </div>
                             </div>
-
-                            <div className="pt-2">
-                                <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={simulateFailure}
-                                        onChange={(e) => setSimulateFailure(e.target.checked)}
-                                        className="w-4 h-4 rounded border-gray-300"
-                                    />
-                                    <span className="text-sm text-gray-600">Simulate payment failure (for testing)</span>
-                                </label>
-                            </div>
-
-                            <button
-                                onClick={handlePayment}
-                                disabled={isProcessing || !cardNumber || !cardName || !expiry || !cvv}
-                                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 rounded-lg transition-colors"
-                            >
-                                Pay ₹{amount.toFixed(2)}
-                            </button>
-
-                            <button
-                                onClick={onFailure}
-                                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 rounded-lg transition-colors"
-                            >
-                                Cancel
-                            </button>
                         </div>
-                    )}
+                    </>
+                )}
 
-                    {/* Step 2: Processing */}
-                    {step === 'processing' && (
-                        <div className="text-center py-12 space-y-4">
-                            <div className="flex justify-center">
-                                <div className="w-16 h-16 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+                {/* Step 2: Processing */}
+                {step === 'processing' && (
+                    <div className="text-center py-16 px-8 flex flex-col items-center">
+                        <div className="relative w-24 h-24 mb-6">
+                            <div className="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
+                            <div className="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
+                            <div className="absolute inset-0 flex items-center justify-center text-blue-600">
+                                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
                             </div>
-                            <div>
-                                <h3 className="text-lg font-bold text-gray-800">Processing Payment</h3>
-                                <p className="text-sm text-gray-600 mt-2">Please wait while we process your payment...</p>
-                            </div>
-                            <div className="text-2xl font-bold text-green-600">₹ {amount.toFixed(2)}</div>
                         </div>
-                    )}
+                        <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">Processing...</h3>
+                        <p className="text-slate-500 font-medium mt-2">Contacting card issuer securely</p>
+                    </div>
+                )}
 
-                    {/* Step 3: Success */}
-                    {step === 'success' && (
-                        <div className="text-center py-12 space-y-4">
-                            <div className="flex justify-center">
-                                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center animate-pulse">
-                                    <svg className="w-10 h-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </div>
+                {/* Step 3: Success */}
+                {step === 'success' && (
+                    <div className="text-center py-16 px-8 flex flex-col items-center animate-[fadeIn_0.3s_ease-out]">
+                        <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-6">
+                            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 animate-[fadeUp_0.4s_ease-out_0.2s_both]">
+                                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
                             </div>
-                            <div>
-                                <h3 className="text-lg font-bold text-gray-800">Payment Successful!</h3>
-                                <p className="text-sm text-gray-600 mt-2">Your payment has been processed</p>
-                            </div>
-                            <div className="text-2xl font-bold text-green-600">₹ {amount.toFixed(2)}</div>
-                            <p className="text-xs text-gray-500">Transaction ID: {fakePaymentId}</p>
-                            <button
-                                onClick={() => {
-                                    onSuccess({
-                                        paymentId: Math.floor(Math.random() * 1000000),
-                                        fakePaymentId: fakePaymentId,  // Use the stored payment ID
-                                        amount: amount,
-                                        cardNumber: cardNumber, // Pass the full card number out (will slice in backend)
-                                        cardName: cardName,
-                                        cardType: 'Visa', // Default test mode type
-                                        expiry: expiry,
-                                        cvv: cvv,
-                                        timestamp: new Date().toISOString()
-                                    });
-                                }}
-                                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors"
-                            >
-                                ✓ Done - View My Tickets
-                            </button>
                         </div>
-                    )}
+                        <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">Payment Verified!</h3>
+                        <p className="text-slate-500 font-medium mt-2 mb-8">Receipt sent to your email.</p>
+                        
+                        <div className="w-full bg-slate-50 border border-slate-100 rounded-xl p-4 mb-8 text-left">
+                            <div className="flex justify-between text-sm mb-2">
+                                <span className="text-slate-500">Amount Paid</span>
+                                <span className="font-bold text-slate-900">₹{amount.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-slate-500">Ref Number</span>
+                                <span className="font-mono font-medium text-slate-700">{fakePaymentId}</span>
+                            </div>
+                        </div>
 
-                    {/* Step 4: Failure */}
-                    {step === 'failure' && (
-                        <div className="text-center py-12 space-y-4">
-                            <div className="flex justify-center">
-                                <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center">
-                                    <svg className="w-10 h-10 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </div>
+                        <button
+                            onClick={() => {
+                                onSuccess({
+                                    paymentId: Math.floor(Math.random() * 1000000),
+                                    fakePaymentId: fakePaymentId,
+                                    amount: amount,
+                                    cardNumber: cardNumber,
+                                    cardName: cardName,
+                                    cardType: 'Visa',
+                                    expiry: expiry,
+                                    cvv: cvv,
+                                    timestamp: new Date().toISOString()
+                                });
+                            }}
+                            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-green-600/25 transform hover:-translate-y-0.5"
+                        >
+                            Generate Tickets →
+                        </button>
+                    </div>
+                )}
+
+                {/* Step 4: Failure */}
+                {step === 'failure' && (
+                    <div className="text-center py-16 px-8 flex flex-col items-center animate-[fadeIn_0.3s_ease-out]">
+                        <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mb-6">
+                            <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center shadow-lg shadow-red-500/30 animate-[fadeUp_0.4s_ease-out_0.2s_both]">
+                                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                             </div>
-                            <div>
-                                <h3 className="text-lg font-bold text-gray-800">Payment Failed</h3>
-                                <p className="text-sm text-gray-600 mt-2">Your payment could not be processed</p>
-                            </div>
-                            <p className="text-xs text-red-600 bg-red-50 p-3 rounded">Test mode failure simulation</p>
+                        </div>
+                        <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">Payment Declined</h3>
+                        <p className="text-slate-500 font-medium mt-2 mb-8">Your bank declined this transaction.</p>
+                        
+                        <div className="flex flex-col gap-3 w-full">
                             <button
                                 onClick={() => {
                                     setStep('enter-details');
                                     setSimulateFailure(false);
                                 }}
-                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition-colors"
+                                className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl transition-colors"
                             >
-                                Try Again
+                                Try Different Card
                             </button>
                             <button
                                 onClick={onFailure}
-                                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 rounded-lg transition-colors"
+                                className="w-full bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold py-3.5 rounded-xl transition-colors"
                             >
-                                Cancel
+                                Cancel Order
                             </button>
                         </div>
-                    )}
-                </div>
-
-                {/* Footer */}
-                <div className="bg-gray-50 px-6 py-3 border-t text-center">
-                    <p className="text-xs text-gray-500">🔒 Test mode - No real transactions</p>
-                </div>
+                    </div>
+                )}
             </div>
+            
+            <style>{`
+                @keyframes fadeUp {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+            `}</style>
         </div>
     );
 };

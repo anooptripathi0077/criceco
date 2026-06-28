@@ -5,7 +5,7 @@ const stad1 = {
   city: 'Mumbai',
   country: 'India',
   capacity: 33108,
-  image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Wankhede_Stadium.jpg/1280px-Wankhede_Stadium.jpg',
+  image: 'https://ddbuunwwdcbgchbaphnp.supabase.co/storage/v1/object/sign/stands/wankhede.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83ZmEyNWZmMS05ZDY0LTRiYTAtODBkOS1lYjUzOTlmZTAzZWIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGFuZHMvd2Fua2hlZGUuanBlZyIsImlhdCI6MTc3NjYzOTYzOSwiZXhwIjoxODA4MTc1NjM5fQ.CXKbb9pMbDDSxlOJDWgq8Q4GH2KF3nYfvJ7Ht-DAkSc',
 
   // Each stand: drawn as an arc slice on the canvas
   // start/end = degrees (0 = top, clockwise)

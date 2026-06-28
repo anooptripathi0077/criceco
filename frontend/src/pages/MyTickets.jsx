@@ -166,8 +166,8 @@ const MyTickets = () => {
                                                 </span>
                                             )}
                                         </div>
-                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest font-['JetBrains_Mono']">
-                                            SECURESEAT // #{String(ticket.ticket_id).padStart(6, '0')}
+                                        <span className="text-xl font-bold  text-slate-900 uppercase tracking-widest font-['JetBrains_Mono']">
+                                            TICKET NO: {String(ticket.ticket_id).padStart(2, '0')}
                                         </span>
                                     </div>
 

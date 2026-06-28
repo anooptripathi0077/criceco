@@ -1,8 +1,5 @@
 const dbPool = require('../config/db');
 
-// @desc    Fetch ticket details and biometric vector for gate security
-// @route   GET /api/security/ticket/:ticketId
-// @access  Private (Security Role)
 const getTicketForVerification = async (req, res) => {
     const { ticketId } = req.params;
 

@@ -1,17 +1,19 @@
 import axios from 'axios';
 
-// Connects to your Node.js Backend
+// 1. Connects to your Node.js Backend
+// baseURL should point exactly to your backend URL + /api
 export const backendAPI = axios.create({
-    baseURL: 'http://localhost:5000/api', 
+    baseURL: 'https://secureseat-3.onrender.com/api', 
     withCredentials: true
 });
 
-// Interceptor for checking token in localStorage is no longer needed since we use cookies
+// Interceptor for passing credentials/cookies
 backendAPI.interceptors.request.use((config) => {
     return config;
 });
 
-// Connects directly to your Python AI Service
+// 2. Connects to your Python AI Service
+// baseURL should point exactly to your AI service URL
 export const aiAPI = axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: 'https://secureseat-2.onrender.com',
 });

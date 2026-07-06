@@ -6,23 +6,31 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const dbPool = require('./config/db');
-const { connectRedis } = require('./config/redisClient');
+const { connectRedis } = require('./config/redisClient'); // get module from redisClient.js in /config
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = [
-  "https://secure-seat-rho.vercel.app",
-  "https://secure-seat-git-main-cwayush1s-projects.vercel.app",
-  "https://secure-seat-itjsypibk-cwayush1s-projects.vercel.app",
-];
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim()).filter(Boolean)
+  : [
+      'http://localhost:3000',
+    ];
 
 app.use(cors({
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (like curl, Postman) or from configured origins
+    // Also allow local development origins.
+    if (
+      !origin ||
+      allowedOrigins.includes(origin) ||
+      origin.startsWith('http://localhost') ||
+      origin.startsWith('http://127.0.0.1') ||
+      origin.startsWith('http://0.0.0.0')
+    ) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
@@ -35,7 +43,7 @@ app.get('/api/health', (req, res) => {
     res.status(200).json({ status: 'OK', message: 'SecureSeat Backend is running' });
 });
 
-// Import Routes
+// Import Routes 
 const authRoutes = require('./routes/authRoutes');
 const matchRoutes = require('./routes/matchRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
@@ -43,6 +51,7 @@ const stadiumRoutes = require('./routes/stadiumRoutes');
 const securityRoutes = require('./routes/securityRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 
+// Telling which route to use when a particular api call is done 
 app.use('/api/auth', authRoutes);
 app.use('/api/matches', matchRoutes);
 app.use('/api/bookings', bookingRoutes);

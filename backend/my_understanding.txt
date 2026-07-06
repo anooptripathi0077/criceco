@@ -1,0 +1,8 @@
+CALLING OF API BY FRONTEND TO BACKEND
+
+first if a frontend calls an api lets say /api/auth , on seeing this , the server will route it to the authRoutes module , 
+inside which , out of many declared routes we , select ours one , like if its /api/auth/login , then we will search for 
+the router.posi('/login',Login); 
+where , the Login is a component import from another module ( usually in the controllers folder) 
+and that Login module will do the actual work and then give the appropriate response !! 
+

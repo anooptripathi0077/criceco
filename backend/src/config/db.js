@@ -1,14 +1,12 @@
 const { Pool } = require('pg');
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+require('dotenv').config();
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-   
     ssl: {
         rejectUnauthorized: false
     },
-    max: 20, 
+    max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
 });

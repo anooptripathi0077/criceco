@@ -5,10 +5,15 @@ const dbPool = require('../config/db');
 // @access  Public
 const getMatches = async (req, res) => {
     try {
+        // Stadiums stores layout and metadata in layout_data JSONB.
+        // Avoid referencing non-existent columns like s.images or s.model_url
+        // which cause SQL errors when the schema doesn't include them.
         const matches = await dbPool.query(`
-            SELECT m.*, s.images AS stadium_images, s.model_url 
-            FROM Matches m 
-            LEFT JOIN Stadiums s ON m.stadium_id = s.id 
+            SELECT m.*, 
+                   s.layout_data->'images' AS stadium_images,
+                   s.layout_data->>'model_url' AS model_url
+            FROM Matches m
+            LEFT JOIN Stadiums s ON m.stadium_id = s.id
             ORDER BY m.date ASC
         `);
         res.status(200).json(matches.rows);

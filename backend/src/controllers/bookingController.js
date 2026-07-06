@@ -103,8 +103,10 @@ const confirmBooking = async (req, res) => {
 
         // 3. Call Python AI Microservice to generate Face Vector Embedding (with fallback for testing)
         let faceEmbedding = null;
+        const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://localhost:8000';
+
         try {
-            const aiResponse = await fetch(`${process.env.AI_SERVICE_URL}/generate-embedding`, {
+            const aiResponse = await fetch(`${aiServiceUrl}/generate-embedding`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ image_base64: photoBase64 }),
@@ -116,12 +118,10 @@ const confirmBooking = async (req, res) => {
                 faceEmbedding = aiData.embedding;
             } else {
                 console.warn('AI service unavailable, using placeholder embedding');
-                // Use placeholder embedding for testing (when AI service is down)
                 faceEmbedding = Array(128).fill(0).map(() => Math.random() * 0.1);
             }
         } catch (aiError) {
             console.warn('AI service call failed, using placeholder embedding:', aiError.message);
-            // Use placeholder embedding for testing (when AI service is down)
             faceEmbedding = Array(128).fill(0).map(() => Math.random() * 0.1);
         }
 
@@ -192,5 +192,4 @@ const getMyTickets = async (req, res) => {
     }
 };
 
-// Don't forget to export it!
 module.exports = { lockSeat, confirmBooking, getMyTickets };

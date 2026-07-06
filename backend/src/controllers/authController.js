@@ -12,8 +12,8 @@ const generateToken = (res, id, role, email) => {
 
     res.cookie('token', token, {
         httpOnly: true,
-        secure: true,          // Required for HTTPS
-        sameSite: 'none',      // Required for Vercel <-> Render
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         maxAge: 30 * 24 * 60 * 60 * 1000
     });
 
@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
     const passwordRegex =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
-    if (!passwordRegex.test(password)) {
+    if (!passwordRegex.test(password)) { // password constraints
         return res.status(400).json({
             message:
                 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.'
@@ -109,8 +109,8 @@ const loginUser = async (req, res) => {
 const logoutUser = (req, res) => {
     res.cookie('token', '', {
         httpOnly: true,
-        secure: true,
-        sameSite: 'none',
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         expires: new Date(0)
     });
 

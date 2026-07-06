@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-require('dotenv').config({ path: 'd:/criceco/backend/.env' });
+require('dotenv').config();
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL

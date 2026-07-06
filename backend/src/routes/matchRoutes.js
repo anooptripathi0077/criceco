@@ -6,7 +6,7 @@ const {
     getMatchSeatsAndPricing,
     getBlockSeats,
     getStandBlocks,
-    getMatchStands,        // ← added
+    getMatchStands,       
     getSeatPrice,
 } = require('../controllers/matchController');
 const { protect } = require('../middlewares/authMiddleware');

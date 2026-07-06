@@ -3,7 +3,7 @@ import axios from 'axios';
 // 1. Connects to your Node.js Backend
 // baseURL should point exactly to your backend URL + /api
 export const backendAPI = axios.create({
-    baseURL: 'https://secureseat-3.onrender.com/api', 
+    baseURL: import.meta.env.VITE_BACKEND_API_URL ?? 'http://localhost:5000/api',
     withCredentials: true
 });
 
@@ -15,5 +15,5 @@ backendAPI.interceptors.request.use((config) => {
 // 2. Connects to your Python AI Service
 // baseURL should point exactly to your AI service URL
 export const aiAPI = axios.create({
-    baseURL: 'https://secureseat-2.onrender.com',
+    baseURL: import.meta.env.VITE_AI_SERVICE_URL ?? 'http://localhost:8000',
 });

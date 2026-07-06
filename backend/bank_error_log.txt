@@ -1,0 +1,5 @@
+error: duplicate key value violates unique constraint "bank_transaction_reference_key"
+error: duplicate key value violates unique constraint "bank_transaction_reference_key"
+    at C:\Users\Anoop Tripathi\mypersonal\cric-eco-final\final-sync\backend\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async verifyPayment (C:\Users\Anoop Tripathi\mypersonal\cric-eco-final\final-sync\backend\src\controllers\paymentController.js:128:21)

@@ -1,6 +1,6 @@
 # SecureSeat: High-Concurrency Ticket Booking & Biometric Verification System
 
-![SecureSeat Architecture](https://via.placeholder.com/1000x300?text=SecureSeat+Architecture+Diagram) ## 📌 Overview
+![SecureSeat Architecture](arch_diagram.png) ## 📌 Overview
 SecureSeat is a scalable, full-stack ticket booking platform designed to handle high-concurrency booking scenarios while preventing ticket scalping. It features a distributed caching mechanism to handle temporary seat locks and integrates an AI-powered facial recognition microservice to bind tickets to a user's biometric identity using vector embeddings.
 
 ## ✨ Key Features
